@@ -5,17 +5,19 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.visualization import plot_histogram
 from qiskit.tools.monitor import job_monitor
 from azure.quantum.qiskit import AzureQuantumProvider
+from qiskit import Aer
 
 listaTeste = ["Hadamard", "PauliZ", "RX"]
 
 
 def initialize(level):
-    provider = AzureQuantumProvider(
-    resource_id="/subscriptions/b1d7f7f8-743f-458e-b3a0-3e09734d716d/resourceGroups/aq-hackathons/providers/Microsoft.Quantum/Workspaces/aq-hackathon-01",
-    location="East US"
-    )
-    #print([backend.name() for backend in provider.backends()])
-    simulator = provider.get_backend("ionq.simulator")
+    # provider = AzureQuantumProvider(
+    # resource_id="/subscriptions/b1d7f7f8-743f-458e-b3a0-3e09734d716d/resourceGroups/aq-hackathons/providers/Microsoft.Quantum/Workspaces/aq-hackathon-01",
+    # location="East US"
+    # )
+    # #print([backend.name() for backend in provider.backends()])
+    # simulator = provider.get_backend("ionq.simulator")
+    simulator = Aer.get_backend('statevector_simulator')
     scoreCircuit = QuantumCircuit(level+2, level+2)
     playerCircuit = QuantumCircuit(1,1)
 
