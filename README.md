@@ -7,6 +7,11 @@ We have utilized this simple game to understand the complex concepts of Quantum 
 
 
 Steps: QuPAC
-
+1. Setup:
+2. Draw the maze : This function sets the background of the screen for starting the game
+3. Draw PacMan : We need to set a starting position and direction for PacMan.
+4. Move PacMan
+5. Increase the score : When Pac-Man moves over a dot, the score increases by one, and the dot is removed. 
+6. Add the ghosts : First, we need to add the starting positions of our ghosts. 
 
 This is the repository for the IQuHACK 2022 project.
