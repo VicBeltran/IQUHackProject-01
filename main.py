@@ -12,6 +12,8 @@ SCREEN_WIDTH = 1000
 pygame.init()
 FPS = 10
 FramePerSec = pygame.time.Clock()
+
+game_font = pygame.font.SysFont('Arial', 20)
  
 BLUE  = (0, 0, 255)
 RED   = (255, 0, 0)
@@ -60,8 +62,9 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load("Enemy.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50)) 
         self.rect = self.image.get_rect()
-        gen_row = choice(list(range(5,15)))
-        gen_col = tiles[gen_row].index(1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
         self.currentdir = (0,0,0,1)
  
@@ -148,7 +151,11 @@ class HGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'H'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -160,7 +167,11 @@ class PZGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'Z'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -173,7 +184,11 @@ class PXGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'X'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -185,7 +200,11 @@ class PYGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'Y'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -197,7 +216,11 @@ class RYGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'RY'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -209,7 +232,11 @@ class RZGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'RZ'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -221,7 +248,11 @@ class RXGate(pygame.sprite.Sprite):
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'RX'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -281,11 +312,17 @@ gates.add(Ry)
 scoreGates = pygame.sprite.Group()
 gates.add(cnot)
 
-def drawMaze():
+def drawMaze(surface):
+    what_to_draw = {'H': 'H', 'Z': 'Z', 'X': 'X', 'Y': 'Y', 'RX': 'RX', 'RY': 'RY', 'RZ': 'RZ'}
     for row_id, row in enumerate(tiles):
         for col_id, col in enumerate(row):
             if col == 0:
-                pygame.draw.rect(DISPLAYSURF, WHITE, pygame.Rect(50*col_id, 50*row_id, 50, 50))  
+                pygame.draw.rect(surface, WHITE, pygame.Rect(50*col_id, 50*row_id, 50, 50))
+            elif col == 1:
+                continue
+            else:
+                txt = pygame.font.Font.render(game_font, what_to_draw[col], True, WHITE)
+                surface.blit(txt, (50*col_id + 15, 50*row_id + 10))
 
 def die():
     DISPLAYSURF.fill(RED)
@@ -308,7 +345,7 @@ while True:
         enemy.move()
      
     DISPLAYSURF.fill(BLACK)
-    drawMaze()
+    drawMaze(DISPLAYSURF)
     for entity in all_sprites:
         entity.draw(DISPLAYSURF)
 
