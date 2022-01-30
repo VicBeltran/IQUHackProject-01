@@ -435,7 +435,7 @@ def pgpopup(surface, gates, simulator, playerCircuit, quantumRotDict, quantumGat
 
 def scoreupdate(surface, score):
     txt2 = pygame.font.Font.render(game_font_large, "SCORE:" + str(score), True, RED)
-    surface.blit(txt2, (500, 500))
+    surface.blit(txt2, (860, 960))
     pygame.display.update()
 
 
@@ -531,7 +531,7 @@ while True:
             victory()
 
 
-    pygame.display.update()
+    # pygame.display.update()
     frame += 1
     frame = frame % 4
     FramePerSec.tick(FPS)
