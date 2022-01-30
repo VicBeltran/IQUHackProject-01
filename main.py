@@ -2,9 +2,9 @@ import pygame, sys
 from pygame.locals import *
 import random
 import time
-import pygamepopup
+import tkinter as tk
+from tkinter import *
 from Quantum_Measure import *
-
 from random import choice
 
 SCREEN_WIDTH = 1000
@@ -333,7 +333,26 @@ def die():
     pygame.quit()
     sys.exit()
 
-
+def popup():
+    window = Tk()
+    window.title("IQuHACK")
+    window.resizable(width=FALSE, height=FALSE)
+    window.geometry('{}x{}'.format(200, 150))
+    window.grid_rowconfigure(0, weight=1)
+    window.grid_rowconfigure(1, weight=0)
+    window.grid_columnconfigure(0, weight=0)
+    frame = Frame(window)
+    frame.grid(row = 0, column = 0)
+    frame.grid_columnconfigure(0, weight=0)
+    frame.grid_columnconfigure(1, weight=0)
+    frame.grid_columnconfigure(2, weight=0)
+    label = Label(frame, text = "Please wait while you are measured!").grid(row = 0, column = 1)
+    img = PhotoImage(file="Enemy.png")
+    label2 = Label(window, image = img)
+    label2.grid(row = 1, column = 0)
+    window.mainloop() 
+    return window
+   
 while True:
     for event in pygame.event.get():              
         if event.type == QUIT:
