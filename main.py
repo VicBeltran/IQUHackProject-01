@@ -141,9 +141,10 @@ class Pacman(pygame.sprite.Sprite):
         # (cur_row, cur_col) = (self.rect.center[1]//50, self.rect.center[0]//50)
         surface.blit(self.image, self.rect)     
 
-class HGate(pygame.sprite):
+class HGate(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        self.name = "Hadamard"
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
@@ -151,12 +152,108 @@ class HGate(pygame.sprite):
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
+
+class PZGate(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliZ"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+
+
+class PXGate(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliX"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+
+class PYGate(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliY"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+
+class RYGate(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliY"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+
+class RZGate(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliY"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+
+class RXGate(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliY"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+
+class CNOT(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.name = "PauliY"
+        self.image = pygame.image.load("Hadamard.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (50,50))
+        self.rect = self.image.get_rect()
+        self.rect.center = tiles2center(3,1)
+    
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)
+    
          
 P1 = Pacman()
 E1 = Enemy()
 E2 = Enemy()
 E3 = Enemy()
 E4 = Enemy()
+H = HGate()
+PauliZ = PZGate()
+PauliY = PYGate()
+PauliX = PXGate()
+Rx = RXGate()
+Ry = RYGate()
+Rz = RZGate()
+cnot = CNOT()
+
+
 
 #Creating Sprites Groups
 enemies = pygame.sprite.Group()
@@ -171,6 +268,18 @@ all_sprites.add(E1)
 all_sprites.add(E2)
 all_sprites.add(E3)
 all_sprites.add(E4)
+
+gates = pygame.sprite.Group()
+gates.add(H)
+gates.add(PauliZ)
+gates.add(PauliY)
+gates.add(PauliX)
+gates.add(Rx)
+gates.add(Rz)
+gates.add(Ry)
+
+scoreGates = pygame.sprite.Group()
+gates.add(cnot)
 
 def drawMaze():
     for row_id, row in enumerate(tiles):
@@ -228,6 +337,17 @@ while True:
                 die()
             else: 
                 continue
+    
+    if pygame.sprite.spritecollideany(P1, gates):
+        if P1.is_collided_with(H):
+            P1.qGates.append("Hadamard")
+        elif P1.is_collided_with(PauliZ):
+            P1.qGates.append("PauliZ")
+        elif P1.is_collided_with(PauliX):
+            P1.qGates.append("PauliX")
+        elif P1.is_collided_with(PauliY):
+            P1.qGates.append("PauliY")
+
 
     pygame.display.update()
     frame += 1
