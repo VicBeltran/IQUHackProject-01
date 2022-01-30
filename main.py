@@ -62,6 +62,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("Enemy.png").convert_alpha()
+        # self.image = pygame.image.load("Enemy" + str(type) + ".png").convert_alpha()
+        # self.type = type
         self.image = pygame.transform.smoothscale(self.image, (50,50)) 
         self.rect = self.image.get_rect()
         gen_row = choice(list(range(2,19)))
@@ -156,7 +158,7 @@ class HGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'H'
+        tiles[gen_row][gen_col] = 'H'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -177,7 +179,7 @@ class PZGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'Z'
+        tiles[gen_row][gen_col] = 'Z'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -199,7 +201,7 @@ class PXGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'X'
+        tiles[gen_row][gen_col] = 'X'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -220,7 +222,7 @@ class PYGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'Y'
+        tiles[gen_row][gen_col] = 'Y'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -241,7 +243,7 @@ class RYGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'RY'
+        tiles[gen_row][gen_col] = 'RY'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -262,7 +264,7 @@ class RZGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'RZ'
+        tiles[gen_row][gen_col] = 'RZ'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -283,7 +285,7 @@ class RXGate(pygame.sprite.Sprite):
         indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
         gen_col = choice(indices)
         self.rect.center = tiles2center(gen_col, gen_row)
-        # tiles[gen_row][gen_col] = 'RX'
+        tiles[gen_row][gen_col] = 'RX'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -296,18 +298,22 @@ class RXGate(pygame.sprite.Sprite):
 class CNOT(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.name = "PauliY"
+        self.name = "CNOT"
         self.image = pygame.image.load("Hadamard.png").convert_alpha()
         self.image = pygame.transform.smoothscale(self.image, (50,50))
         self.rect = self.image.get_rect()
-        self.rect.center = tiles2center(3,1)
+        gen_row = choice(list(range(2,19)))
+        indices = [i for i, col in enumerate(tiles[gen_row]) if col == 1]
+        gen_col = choice(indices)
+        self.rect.center = tiles2center(gen_col, gen_row)
+        tiles[gen_row][gen_col] = 'RX'
     
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
 
     def draw(self, surface):
-        what_to_draw = {'H': 'H', 'Z': 'Z', 'X': 'X', 'Y': 'Y', 'RX': 'RX', 'RY': 'RY', 'RZ': 'RZ'}
-        txt = pygame.font.Font.render(game_font, what_to_draw['H'], True, WHITE)
+        what_to_draw = {'H': 'H', 'Z': 'Z', 'X': 'X', 'Y': 'Y', 'RX': 'RX', 'RY': 'RY', 'RZ': 'RZ', 'CN': 'CN'}
+        txt = pygame.font.Font.render(game_font, what_to_draw['CN'], True, WHITE)
         surface.blit(txt, self.rect.center)
     
          
@@ -330,6 +336,9 @@ enemies.add(E2)
 enemies.add(E3)
 enemies.add(E4)
 
+# prevents two gates from generating on the same spot
+temp_tiles = tiles
+
 H = HGate()
 PauliZ = PZGate()
 PauliY = PYGate()
@@ -337,7 +346,9 @@ PauliX = PXGate()
 # Rx = RXGate()
 # Ry = RYGate()
 # Rz = RZGate()
-# cnot = CNOT()
+cnot = CNOT()
+
+tiles = temp_tiles
 
 gates = pygame.sprite.Group()
 gates.add(H)
@@ -349,7 +360,7 @@ gates.add(PauliX)
 # gates.add(Ry)
 
 scoreGates = pygame.sprite.Group()
-# gates.add(cnot)
+gates.add(cnot)
 
 def drawMaze(surface):
     # what_to_draw = {'H': 'H', 'Z': 'Z', 'X': 'X', 'Y': 'Y', 'RX': 'RX', 'RY': 'RY', 'RZ': 'RZ'}
@@ -366,10 +377,12 @@ def drawMaze(surface):
 
 def die():
     DISPLAYSURF.fill(RED)
+    txt2 = pygame.font.Font.render(game_font_large, "You just died :D", True, WHITE)
+    DISPLAYSURF.blit(txt2, (300,400))
     pygame.display.update()
+    time.sleep(2)
     for entity in all_sprites:
         entity.kill() 
-    time.sleep(2)
     pygame.quit()
     sys.exit()
 
@@ -407,6 +420,7 @@ def pgpopup(surface, gates, simulator, playerCircuit, quantumRotDict, quantumGat
     surface.blit(txt2, (300,400))
     pygame.display.update()
     time.sleep(2)
+    return verAlive
    
 while True:
     for event in pygame.event.get():              
@@ -434,6 +448,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
+                P1.qGates(["PauliX"])
                 E1.kill()
                 continue
 
@@ -445,6 +460,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
+                P1.qGates(["PauliX"])
                 E2.kill()
                 continue
 
@@ -456,6 +472,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
+                P1.qGates(["PauliX"])
                 E3.kill()
                 continue
 
@@ -467,6 +484,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
+                P1.qGates(["PauliX"])
                 E4.kill()
                 continue
     

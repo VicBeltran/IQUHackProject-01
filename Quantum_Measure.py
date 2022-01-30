@@ -48,11 +48,15 @@ def execute_measurement(qGates, simulator, playerCircuit, quantumRotDict, quantu
         playerCircuit.h(0)
         playerCircuit.measure(0, 0)
 
-    # compiled_circuit = transpile(playerCircuit, simulator)
-    # job = simulator.run(compiled_circuit, shots = 100)
-    # result = job.result()
-    # counts = result.get_counts(playerCircuit)
-    counts = {"0": 1, "1":2}
+    compiled_circuit = transpile(playerCircuit, simulator)
+    job = simulator.run(compiled_circuit, shots = 1)
+    result = job.result()
+    counts = result.get_counts(playerCircuit)
+    # counts = {"0": 1, "1":2}
+    if '0' in counts:
+        return 0
+    else:
+        return 1
     if counts["0"] >= counts["1"]:
         return 0
     else:
