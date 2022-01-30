@@ -29,6 +29,7 @@ def initialize(level):
     return scoreCircuit, playerCircuit, quantumGateDict, quantumRotDict, simulator
 
 def execute_measurement(qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, measurement):
+    playerCircuit.reset(0)
     for gate in qGates:
         if gate in quantumGateDict:
             quantumGateDict[gate](0)
