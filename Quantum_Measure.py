@@ -72,7 +72,7 @@ def Score_circuit(gate, scoreCircuit, score, scorelist):
             scoreCircuit.h(0)
         else:
             scoreCircuit.cnot(cnot_count, cnot_count+ 1)
-            cnot_count += 1
+            cnot_count += 1                     
     return score, scoreCircuit
 
 #scoreCircuit, playerCircuit, quantumGateDict, quantumRotDict, simulator = initialize()
