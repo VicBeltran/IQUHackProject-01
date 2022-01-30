@@ -57,10 +57,6 @@ def execute_measurement(qGates, simulator, playerCircuit, quantumRotDict, quantu
         return 0
     else:
         return 1
-    if counts["0"] >= counts["1"]:
-        return 0
-    else:
-        return 1
 
 def Score_circuit(gate, scoreCircuit, score, scorelist):
     cnot_count = 0
@@ -76,8 +72,8 @@ def Score_circuit(gate, scoreCircuit, score, scorelist):
             scoreCircuit.h(0)
         else:
             scoreCircuit.cnot(cnot_count, cnot_count+ 1)
-            cnot_count += 1
-    return score, scoreCircuit                         
+            cnot_count += 1                     
+    return score, scoreCircuit
 
 #scoreCircuit, playerCircuit, quantumGateDict, quantumRotDict, simulator = initialize()
 
