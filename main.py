@@ -59,11 +59,11 @@ DISPLAYSURF.fill(BLACK)
 pygame.display.set_caption("Game")
  
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, type):
         super().__init__() 
-        self.image = pygame.image.load("Enemy.png").convert_alpha()
-        # self.image = pygame.image.load("Enemy" + str(type) + ".png").convert_alpha()
-        # self.type = type
+        #self.image = pygame.image.load("Enemy.png").convert_alpha()
+        self.image = pygame.image.load("Enemy" + str(type) + ".png").convert_alpha()
+        self.type = type
         self.image = pygame.transform.smoothscale(self.image, (50,50)) 
         self.rect = self.image.get_rect()
         gen_row = choice(list(range(2,19)))
@@ -318,10 +318,10 @@ class CNOT(pygame.sprite.Sprite):
     
          
 P1 = Pacman()
-E1 = Enemy()
-E2 = Enemy()
-E3 = Enemy()
-E4 = Enemy()
+E1 = Enemy(type = "Z")
+E2 = Enemy(type = "Z")
+E3 = Enemy(type = "Y")
+E4 = Enemy(type = "X")
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
 all_sprites.add(E1)
@@ -355,6 +355,7 @@ gates.add(H)
 gates.add(PauliZ)
 gates.add(PauliY)
 gates.add(PauliX)
+gates.add(cnot)
 # gates.add(Rx)
 # gates.add(Rz)
 # gates.add(Ry)
@@ -378,6 +379,17 @@ def drawMaze(surface):
 def die():
     DISPLAYSURF.fill(RED)
     txt2 = pygame.font.Font.render(game_font_large, "You just died :D", True, WHITE)
+    DISPLAYSURF.blit(txt2, (300,400))
+    pygame.display.update()
+    time.sleep(2)
+    for entity in all_sprites:
+        entity.kill() 
+    pygame.quit()
+    sys.exit()
+
+def victory():
+    DISPLAYSURF.fill(BLUE)
+    txt2 = pygame.font.Font.render(game_font_large, "YOU WON! :D", True, WHITE)
     DISPLAYSURF.blit(txt2, (300,400))
     pygame.display.update()
     time.sleep(2)
@@ -421,17 +433,25 @@ def pgpopup(surface, gates, simulator, playerCircuit, quantumRotDict, quantumGat
     pygame.display.update()
     time.sleep(2)
     return verAlive
-   
+
+def scoreupdate(surface, score):
+    txt2 = pygame.font.Font.render(game_font_large, "SCORE:" + str(score), True, RED)
+    surface.blit(txt2, (500, 500))
+    pygame.display.update()
+
+
+score = 0
+scorelist = [] 
 while True:
     for event in pygame.event.get():              
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
     P1.update()
-    
+
     for enemy in enemies:
         enemy.move()
-     
+    scoreupdate(DISPLAYSURF, score)
     DISPLAYSURF.fill(BLACK)
     drawMaze(DISPLAYSURF)
     for entity in all_sprites:
@@ -448,7 +468,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
-                P1.qGates(["PauliX"])
+                P1.qGates = ["PauliX"] 
                 E1.kill()
                 continue
 
@@ -460,7 +480,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
-                P1.qGates(["PauliX"])
+                P1.qGates = ["PauliX"]
                 E2.kill()
                 continue
 
@@ -472,7 +492,7 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
-                P1.qGates(["PauliX"])
+                P1.qGates = ["PauliX"]
                 E3.kill()
                 continue
 
@@ -484,13 +504,15 @@ while True:
             if verAlive == 0:   
                 die()
             else: 
-                P1.qGates(["PauliX"])
+                P1.qGates = ["PauliX"]
                 E4.kill()
                 continue
     
     if pygame.sprite.spritecollideany(P1, gates):
         if P1.is_collided_with(H):
             P1.qGates.append("Hadamard")
+            scorelist.append("H")
+            score, scoreCircuit = Score_circuit("H", scoreCircuit, score, scorelist)
             H.kill()
         elif P1.is_collided_with(PauliZ):
             P1.qGates.append("PauliZ")
@@ -501,6 +523,13 @@ while True:
         elif P1.is_collided_with(PauliY):
             P1.qGates.append("PauliY")
             PauliY.kill()
+        elif P1.is_collided_with(cnot):
+            P1.qGates.append("CNOT")
+            scorelist.append("CNOT")
+            score, scoreCircuit = Score_circuit("CNOT", scoreCircuit, score, scorelist)
+            cnot.kill()
+        if score == 2:
+            victory()
 
 
     pygame.display.update()
