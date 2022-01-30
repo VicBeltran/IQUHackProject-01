@@ -59,11 +59,10 @@ DISPLAYSURF.fill(BLACK)
 pygame.display.set_caption("Game")
  
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, kind):
         super().__init__() 
-        self.image = pygame.image.load("Enemy.png").convert_alpha()
-        # self.image = pygame.image.load("Enemy" + str(type) + ".png").convert_alpha()
-        # self.type = type
+        self.image = pygame.image.load("Enemy" + str(kind) + ".png").convert_alpha()
+        self.kind = kind
         self.image = pygame.transform.smoothscale(self.image, (50,50)) 
         self.rect = self.image.get_rect()
         gen_row = choice(list(range(2,19)))
@@ -318,10 +317,10 @@ class CNOT(pygame.sprite.Sprite):
     
          
 P1 = Pacman()
-E1 = Enemy()
-E2 = Enemy()
-E3 = Enemy()
-E4 = Enemy()
+E1 = Enemy('X')
+E2 = Enemy('Y')
+E3 = Enemy('Z')
+E4 = Enemy('X')
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
 all_sprites.add(E1)
@@ -442,9 +441,9 @@ while True:
     if pygame.sprite.spritecollideany(P1, enemies):
         if P1.is_collided_with(E1):
             if POPUP == 'TKINTER':
-                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "Z")
+                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E1.kind)
             elif POPUP == 'PYGAME':
-                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "Z")
+                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E1.kind)
             if verAlive == 0:   
                 die()
             else: 
@@ -454,9 +453,9 @@ while True:
 
         elif P1.is_collided_with(E2):
             if POPUP == 'TKINTER':
-                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "Z")
+                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E2.kind)
             elif POPUP == 'PYGAME':
-                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "Z")
+                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E2.kind)
             if verAlive == 0:   
                 die()
             else: 
@@ -466,9 +465,9 @@ while True:
 
         elif P1.is_collided_with(E3):
             if POPUP == 'TKINTER':
-                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "Y")
+                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E3.kind)
             elif POPUP == 'PYGAME':
-                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "Y")
+                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E3.kind)
             if verAlive == 0:   
                 die()
             else: 
@@ -478,9 +477,9 @@ while True:
 
         elif P1.is_collided_with(E4):
             if POPUP == 'TKINTER':
-                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "X")
+                verAlive = popup(P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E4.kind)
             elif POPUP == 'PYGAME':
-                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, "X")
+                verAlive = pgpopup(DISPLAYSURF, P1.qGates, simulator, playerCircuit, quantumRotDict, quantumGateDict, E4.kind)
             if verAlive == 0:   
                 die()
             else: 
